@@ -1,5 +1,7 @@
 # Banking CDC Data Platform
 
+**English** | [Русский](README.ru.md)
+
 [![CI](https://github.com/SavchukDI/banking_dwh/actions/workflows/ci.yml/badge.svg)](https://github.com/SavchukDI/banking_dwh/actions/workflows/ci.yml)
 [![CD](https://github.com/SavchukDI/banking_dwh/actions/workflows/cd.yml/badge.svg)](https://github.com/SavchukDI/banking_dwh/actions/workflows/cd.yml)
 [![dbt docs](https://img.shields.io/badge/dbt-docs-FF694B?logo=dbt&logoColor=white)](https://savchukdi.github.io/banking_dwh/)
@@ -168,7 +170,7 @@ Full model documentation with the lineage graph: **[dbt docs](https://savchukdi.
 
 ## Quick start
 
-**Requirements:** Docker with Docker Compose, Python 3.11.
+**Requirements:** Docker with Docker Compose, Python 3.14.7.
 
 ```bash
 # 1. Configuration
