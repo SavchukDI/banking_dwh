@@ -1,0 +1,14 @@
+.git
+.github
+.venv
+venv
+.env
+.env.*
+**/__pycache__
+**/*.pyc
+banking_dbt/target
+banking_dbt/logs
+banking_dbt/dbt_packages
+banking_dbt/.user.yml
+logs
+*.parquet
