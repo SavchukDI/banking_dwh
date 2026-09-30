@@ -70,8 +70,26 @@ jobs:
 
       - name: dbt debug
         working-directory: banking_dbt
-        run: dbt debug
+        run: dbt debug --target ci
 
-      - name: dbt build
+      - name: Load fixtures (phase 1)
+        run: |
+          docker exec -i ${{ job.services.clickhouse.id }} \
+            clickhouse-client -u bank --password bank --multiquery < ci/fixtures/raw_phase1.sql
+
+      - name: dbt build (phase 1)
         working-directory: banking_dbt
-        run: dbt build
+        run: dbt build --target ci --exclude tag:ci
+
+      - name: Load fixtures (phase 2)
+        run: |
+          docker exec -i ${{ job.services.clickhouse.id }} \
+            clickhouse-client -u bank --password bank --multiquery < ci/fixtures/raw_phase2.sql
+
+      - name: dbt build (phase 2, incremental + new snapshot versions)
+        working-directory: banking_dbt
+        run: dbt build --target ci --exclude tag:ci
+
+      - name: CI data assertions
+        working-directory: banking_dbt
+        run: dbt test --target ci --select tag:ci

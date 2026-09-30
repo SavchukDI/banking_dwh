@@ -1,7 +1,7 @@
 banking_dbt:
   target: dev
   outputs:
-    dev:
+    dev: &clickhouse
       type: clickhouse
       driver: http
       host: "{{ env_var('CLICKHOUSE_HOST', 'localhost') }}"
@@ -10,3 +10,4 @@ banking_dbt:
       password: "{{ env_var('CLICKHOUSE_PASSWORD', 'bank') }}"
       schema: analytics
       threads: 4
+    ci: *clickhouse
