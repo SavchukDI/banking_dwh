@@ -1,8 +1,8 @@
 # Banking CDC Data Platform
 
-[![CI](https://github.com/<github-user>/<repo>/actions/workflows/ci.yml/badge.svg)](https://github.com/<github-user>/<repo>/actions/workflows/ci.yml)
-[![CD](https://github.com/<github-user>/<repo>/actions/workflows/cd.yml/badge.svg)](https://github.com/<github-user>/<repo>/actions/workflows/cd.yml)
-[![dbt docs](https://img.shields.io/badge/dbt-docs-FF694B?logo=dbt&logoColor=white)](https://<github-user>.github.io/<repo>/)
+[![CI](https://github.com/SavchukDI/banking_dwh/actions/workflows/ci.yml/badge.svg)](https://github.com/SavchukDI/banking_dwh/actions/workflows/ci.yml)
+[![CD](https://github.com/SavchukDI/banking_dwh/actions/workflows/cd.yml/badge.svg)](https://github.com/SavchukDI/banking_dwh/actions/workflows/cd.yml)
+[![dbt docs](https://img.shields.io/badge/dbt-docs-FF694B?logo=dbt&logoColor=white)](https://savchukdi.github.io/banking_dwh/)
 
 End-to-end data platform for a simulated bank: every change in the operational PostgreSQL database is captured via **CDC (Debezium + Kafka)**, landed as Parquet in **MinIO**, loaded into **ClickHouse** by **Airflow**, and modeled with **dbt** into a star schema with **SCD Type 2** history. Everything runs locally in Docker; CI tests the dbt logic against an ephemeral ClickHouse with edge-case fixtures, CD publishes the Airflow image and dbt docs.
 
@@ -89,7 +89,7 @@ erDiagram
 
 Each transaction references the **versions** of the account and the customer that were valid at the moment of the transaction, so questions like *"what was the account status when this payment happened?"* are answered by a plain join.
 
-Full model documentation with the lineage graph: **[dbt docs](https://<github-user>.github.io/<repo>/)**.
+Full model documentation with the lineage graph: **[dbt docs](https://savchukdi.github.io/banking_dwh/)**.
 
 ## Key design decisions
 
