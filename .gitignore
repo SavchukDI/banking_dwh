@@ -1,0 +1,34 @@
+# --- Секреты ---
+.env
+.env.*
+!.env.example
+
+# --- Python ---
+.venv/
+venv/
+__pycache__/
+*.pyc
+.ruff_cache/
+.pytest_cache/
+
+# --- dbt ---
+banking_dbt/target/
+banking_dbt/logs/
+banking_dbt/dbt_packages/
+banking_dbt/.user.yml
+logs/
+
+# --- Airflow (если логи окажутся в папке проекта) ---
+airflow/logs/
+
+# --- Данные и временные файлы ---
+*.parquet
+*.log
+
+# --- IDE и ОС ---
+.idea/
+.vscode/
+Thumbs.db
+desktop.ini
+.DS_Store
+.github/.cache/

@@ -1,0 +1,36 @@
+version: 2
+
+models:
+  - name: stg_customers
+    description: "Актуальное состояние клиентов (последнее CDC-событие, без удалённых)"
+    columns:
+      - name: customer_id
+        data_tests: [unique, not_null]
+
+  - name: stg_accounts
+    description: "Актуальное состояние счетов"
+    columns:
+      - name: account_id
+        data_tests: [unique, not_null]
+      - name: customer_id
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('stg_customers')
+              field: customer_id
+      - name: status
+        data_tests:
+          - accepted_values:
+              values: ["active", "blocked", "closed"]
+
+  - name: stg_transactions
+    description: "Транзакции (append-only)"
+    columns:
+      - name: transaction_id
+        data_tests: [unique, not_null]
+      - name: account_id
+        data_tests:
+          - not_null
+          - relationships:
+              to: ref('stg_accounts')
+              field: account_id

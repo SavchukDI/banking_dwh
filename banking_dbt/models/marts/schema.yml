@@ -1,0 +1,70 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: "Измерение клиентов с историей версий (SCD2). Одна строка = одна версия клиента."
+    columns:
+      - name: customer_version_key
+        description: "Суррогатный ключ версии (dbt_scd_id из снапшота)"
+        data_tests: [unique, not_null]
+      - name: customer_id
+        description: "Бизнес-ключ клиента из Postgres"
+        data_tests: [not_null]
+      - name: valid_from
+        description: "Начало действия версии. У первой версии = created_at"
+        data_tests: [not_null]
+      - name: valid_to
+        description: "Конец действия версии. NULL у текущей версии"
+      - name: is_current
+        description: "Признак текущей версии"
+
+  - name: dim_accounts
+    description: "Измерение счетов с историей версий (SCD2) по status, account_type, currency. Баланса нет: это показатель, а не атрибут."
+    columns:
+      - name: account_version_key
+        description: "Суррогатный ключ версии (dbt_scd_id из снапшота)"
+        data_tests: [unique, not_null]
+      - name: account_id
+        description: "Бизнес-ключ счёта из Postgres"
+        data_tests: [not_null]
+      - name: status
+        data_tests:
+          - accepted_values:
+              values: ["active", "blocked", "closed"]
+      - name: account_type
+        data_tests:
+          - accepted_values:
+              values: ["checking", "savings", "credit"]
+      - name: valid_from
+        description: "Начало действия версии. У первой версии = opened_at"
+        data_tests: [not_null]
+
+  - name: fact_transactions
+    description: "Факты транзакций. Одна строка = одна транзакция. Ссылается на версии счёта и клиента, действовавшие в момент транзакции."
+    columns:
+      - name: transaction_id
+        data_tests: [unique, not_null]
+      - name: account_version_key
+        description: "Версия счёта на момент транзакции (ASOF JOIN)"
+        data_tests:
+          - relationships:
+              to: ref('dim_accounts')
+              field: account_version_key
+      - name: customer_version_key
+        description: "Версия клиента на момент транзакции (ASOF JOIN)"
+        data_tests:
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_version_key
+      - name: transaction_type
+        data_tests:
+          - accepted_values:
+              values: ["deposit", "withdrawal", "transfer", "payment"]
+      - name: status
+        data_tests:
+          - accepted_values:
+              values: ["pending", "completed", "failed"]
+      - name: account_status_at_transaction
+        description: "Статус счёта в момент транзакции (из версии измерения)"
+      - name: balance_impact
+        description: "Изменение баланса счёта account_id: + пополнение, - списание, 0 у неуспешных"

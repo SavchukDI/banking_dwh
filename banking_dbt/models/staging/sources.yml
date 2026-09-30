@@ -1,0 +1,14 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: raw
+    description: "CDC-события из Postgres (Debezium -> Kafka -> MinIO -> ClickHouse). Одна строка = одно событие."
+    loaded_at_field: _loaded_at
+    freshness:
+      warn_after: {count: 30, period: minute}
+      error_after: {count: 2, period: hour}
+    tables:
+      - name: customers
+      - name: accounts
+      - name: transactions

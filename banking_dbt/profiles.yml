@@ -1,0 +1,12 @@
+banking_dbt:
+  target: dev
+  outputs:
+    dev:
+      type: clickhouse
+      driver: http
+      host: "{{ env_var('CLICKHOUSE_HOST', 'localhost') }}"
+      port: "{{ env_var('CLICKHOUSE_PORT', '8123') | int }}"
+      user: "{{ env_var('CLICKHOUSE_USER', 'bank') }}"
+      password: "{{ env_var('CLICKHOUSE_PASSWORD', 'bank') }}"
+      schema: analytics
+      threads: 4
